@@ -65,7 +65,7 @@ _start:	                ;tell linker entry point
     dec	rsi
     loop	add_loop
 
-    
+
 
         mov	rax,1        ;system call number (sys_write)
         mov	rdi,1	        ;file descriptor (stdout)

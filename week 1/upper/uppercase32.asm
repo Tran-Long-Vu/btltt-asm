@@ -8,28 +8,39 @@ _start: mov ecx, string
         mov ebx,0
         int 80h
 
-toUpper:
-        mov al,[ecx]      ; ecx is the pointer, so [ecx] the current char
+_start: 
+        
+        mov rsi, string
+        call toUpper ;; call function
+        call print
+        
+        mov rax,60 ; end rax
+        mov rdi,0 ; sys exit rbx
+        syscall
+
+toUpper: ; al = 16 bit reg
+        mov al,[rsi]      ; ecx is the pointer, so [ecx] the current char 
         cmp al,0x0 
         je done
         cmp al,'a'
-        jb next_please
+        jb _nextChar
         cmp al,'z'
-        ja next_please
-        sub al,0x20       ; move AL upper case and
-        mov [ecx],al      ; write it back to string
+        ja _nextChar
+        
+        sub al, 0x20        ; move AL upper case and
+        mov [rsi],al      ; write it back to string
 
-next_please:
-        inc ecx           ; not al, that's the character. ecx has to
+_nextChar:
+        inc rsi           ; not al, that's the character. ecx has to
                           ; be increased, to point to next char
-        jmp toUpper
+        jmp toUpper     ; jump? to next char in string
 done:   ret
 
-print:  mov ecx, string    ; what to print
-        mov edx, len       ; length of string to be printed
-        mov ebx, 1
-        mov eax, 4
-        int 80h
+print:  mov rsi, input    ; what to print
+        mov rdx, len       ; length of string to be printed
+        mov rdi, 1          ; std output
+        mov rax, 1         ; write mode
+        syscall
         ret
 
 section .data
