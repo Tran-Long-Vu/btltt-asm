@@ -1,3 +1,23 @@
+; LONG VU TRAN
+; steps: 
+; 1. input two numbers.
+; 2. add. 
+; 3. output results.
+;
+; 2: add
+; -iterate through last number (don vi) 
+; start loop
+; - add num 1 last to num 2 last. 
+;   
+; - if carry, add 1 bit to carry reg.
+; - if not carry, skip to next unit num
+; loop ends: the end of number string
+;
+; - 
+; -  
+; iteration e
+
+
 section	.data
 msg db 'The Sum is:',0xa	
 len equ $ - msg			
