@@ -2,6 +2,8 @@
 section .text ; code zone.
 global _start ; start code
 
+
+
 _start: ; 64 bit runs with rax,rbx,rdx,..
     mov rax, 1 ; write mode rax (eax)
     mov rdi, 1 ; std out  rdi  (ebx)
@@ -15,6 +17,9 @@ _start: ; 64 bit runs with rax,rbx,rdx,..
     mov rdi, 0 ; clear reg rdi, exit code 0
     syscall ; call kernel.
     
+
+
+
 section .data 
 
 msg db "hello world", 10 ; assign var msg with "hello world." end of line.
