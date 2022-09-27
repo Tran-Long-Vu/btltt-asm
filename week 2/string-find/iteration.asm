@@ -37,6 +37,7 @@ toUpper: ; al = 16 bit reg
         mov [rsi],al      ; write it back to string
 
 _nextChar:
+        
         inc rsi           ; not al, that's the character. ecx has to
                           ; be increased, to point to next char
         jmp toUpper     ; jump? to next char in string
@@ -50,6 +51,10 @@ print:  mov rsi, input    ; what to print
         syscall
         ret
 
-section .data
 
+        
+
+
+section .data
+msg db "iterating..",13,10
 len:    equ 32
