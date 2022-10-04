@@ -27,3 +27,5 @@ l1:
    int 0x80              ;call kernel
 section	.bss
 num resb 1
+
+

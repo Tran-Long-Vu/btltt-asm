@@ -25,11 +25,14 @@ _takeInput:
     syscall ; 
 
 toUpper: ; al = 16 bit reg
-        mov al,[rsi]      ; ecx is the pointer, so [ecx] the current char 
+        mov al,[rsi]   
+           ; ecx is the pointer, so [ecx] the current char 
         cmp al,0x0 
         je done
+
         cmp al,'a'
         jb _nextChar
+        
         cmp al,'z'
         ja _nextChar
         

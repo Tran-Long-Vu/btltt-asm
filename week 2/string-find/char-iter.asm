@@ -53,11 +53,7 @@ _start:
     
     call _output1
     call _output2
-    call _downline
-    call _downline
-    call _downline
-    call _downline
-    call _downline
+
        
     
     call _sysexit
@@ -80,13 +76,13 @@ _start:
     syscall
 
     ; compare loop
-;
-;
-;
+;   compare str2[0] vs str1[0]
+;   if match, record.
+;   if not, continue str1[1], 2, 3, 4, 5,...
 
-;
-;
-;
+;   check end of string1: 13,10.
+;   if end of string1 , end of loop.
+;   return results of times found and position,  
 ;
 ;
 ;
