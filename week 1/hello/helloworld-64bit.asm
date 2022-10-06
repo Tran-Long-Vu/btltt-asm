@@ -3,11 +3,22 @@ section .text ; code zone.
 global main ; start code
 
 main: ; 64 bit runs with rax,rbx,rdx,..
-    mov rax, 1 ; write mode rax (eax)
+
+
+    ;mov rax, msg
+    push "A"
+    push "B"
+    push "C"
+    
+
+
+
+
+    mov rax, 1
     mov rdi, 1 ; std out  rdi  (ebx)
 
-    mov rsi, msg; load msg var into reg rsi (ecx)
-    mov rdx, 12  ; msg length into reg rdx (edx
+    pop rsi; load msg var into reg rsi (ecx)
+    mov rdx, 12  ; msg length into reg rdx (edx)
 
     syscall ; call kernel
 
