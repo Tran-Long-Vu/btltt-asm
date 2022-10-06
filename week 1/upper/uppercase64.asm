@@ -24,7 +24,7 @@ _takeInput:
 
     syscall ; 
 
-toUpper: ; al = 16 bit reg
+toUpper: ; al = 8 bit reg
         mov al,[rsi]   
            ; ecx is the pointer, so [ecx] the current char 
         cmp al,0x0 

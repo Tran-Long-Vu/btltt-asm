@@ -6,9 +6,9 @@ main: ; 64 bit runs with rax,rbx,rdx,..
 
 
     ;mov rax, msg
-    push "A"
-    push "B"
-    push "C"
+    ;push "A"
+    ;push "B"
+    ;push "C"
     
 
 
