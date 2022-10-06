@@ -2,20 +2,25 @@
 ; output the reversed.
 
 ; procedure::
-; # NOTE: make  push/pop in a single fucbniton call./
-; slot ABCDE in reg
-; make loop:
+;
+; swap first and last letters 
+; procees loop 1/2 time the length. 
 
-; push each
-; loop pop each
-; move A into smol reg
-; push A in to stackk
-; slot B into new reg
-
-; pop A
+;process is same as - git
 
 
 
+
+; RDI at last - RSI at first
+
+; using stack to exchange.
+; move first char to stack
+; move last char to stack
+; pop last char in RSI
+; pop first char in RDI
+;
+
+;
 
 ;ex: A B C D E into stackk >>>>>   ABCDE ]
 ;
@@ -31,72 +36,70 @@ section .bss;
 section .text ; code zone.
 global main ; start code
 
-    main: ; 64 bit runs with rax,rbx,rdx,..
+    main: ; 64 bit 
         
- 
-        mov rsi, msg; load msg var into reg rsi (ecx)   
-        push rsi
-        call _loop ; SEGMETATION FAULT 
-        pop rsi
-        call _print
-        
-        call _exit
+    call _read
+    call _init
+    call _swap
+    call _write
+    call _exit
 
-      ; add char:
-    _loop:
-        mov rax, [rsi] ; first char
 
-        cmp rax, 0x0 ; check null
-        je _done
-        
-        ;mov rbx, rax ; move 8bit char into rbx. 
-        ;push rbx ; push al char into stack 
-                  ; must pop it back to rbx
-        jmp _next
 
-        
-        ; goes next when done pushing stuff to stackk 
-        ;and clear the register.
-
-        
-        
-
-    _next: 
-        inc rsi ; char +1 
-        push rax
+    
+    _read: 
+        mov rdx,len ; length
+        mov rsi,msg ; read content
+        mov rdi,0
         mov rax,0
-        jmp _loop
-
-
-
-
-
-
-
-
-    _print: 
-        mov rsi, rbx
-        mov rdx, len       ; length of string to be printed
-        mov rdi, 1          ; std output
-        mov rax, 1         ; write mode
         syscall
         ret
-    _done:   
-        pop rbx 
-        ret ; return
+
+    _init:
+    mov rcx,rax     ; Copy the string for later
+    mov rdi,msg     ; Set RDI and RSI to point at message
+    mov rsi,msg     ; note: set RDI at last char
+                    ; RSI at fist letter
+
+    add rdi,rax     ; RDI should point at last character in message
+    dec rdi         ;
+    shr rax,1       ; Divide length by 2
+    ret
+
+    _swap:; Swap the characters using 8 bit registers
+
+    mov bl,[rsi]    ; Swap the characters using 8 bit registers
+    mov dl,[rdi]    ; mov first char to rbx
+    mov [rsi],dl    ; mov last char to rdx
+    mov [rdi],bl   ; mov last char in rsi
+                    ; mov first char in rdi
+                    ; swapped.
+
+    inc rsi         ; Increment rsi (which is a pointer)
+    dec rdi         ; Decrement rdi (also a pointer)
+    dec rax         ; Decrement our counter of chars. loop 1/2time the length
+    jnz _swap       ; If our counter isn't zero, keep looping
+    ret
+    _write:
+    mov rdx,rcx ; nbytes
+    mov rsi,msg ; *msg
+    mov rdi,1 ; stream
+    mov rax,1 ; syscall
+    syscall
+    ret
+        
     _exit:
-        mov rax, 60
-        mov rbx, 0
-        syscall
+    mov rdi,0
+    mov rax,60 ; sysexit
+    syscall
 
 
 section .data 
 
-msg db "ABCDE", 13, 10 ; assign var msg with "ABCDE." end of line.
-len equ $-msg
+msg times 64 db 0 ; distenict byte 64times as zero 0 .; used as 64memory
+len equ 64 ; 64 bit length
 
-msg2 db "xxxxx", 13, 10 ; assign var msg with "ABCDE." end of line.
-len2 equ $-msg
+
 
 
 
