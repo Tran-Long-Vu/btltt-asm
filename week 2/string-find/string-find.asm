@@ -23,7 +23,7 @@ string1 resb 100; reserve string x 100
 string2 resb 1; reserve a x10 string
 
 section .data
-msg db "found similar"
+msg db "check"
 section .text
 
 global main
@@ -35,26 +35,33 @@ main:
 
     call _iterate
     
-    call _output1
-    call _output2
+    ;call _output1
+    ;call _output2
     call _sysexit
 
     _input1:
+        push rsi ; zero 
         mov rax, 0  ; read mode rax code: 
         mov rdi, 0; stdinput code 1
 
         mov rsi, string1 ; take in input
         mov rdx, 100 ; length of input
         syscall
+        pop rsi
+       ; call _printf ; check
+
         ret
 
     _input2:
+        push rsi
         mov rax, 0  ; read mode rax code: 
         mov rdi, 0; stdinput code 1
 
         mov rsi, string2 ; take in input
         mov rdx, 1 ; length of input
         syscall
+        pop rsi
+        ;call _printf ; checks
         ret
 
     ; iteration:
@@ -63,9 +70,10 @@ main:
 
     mov al, [rsi]    ; first char of string1.
     mov rdx, string2 ; char of string2
-    mov bl, [rsi]
+    mov bl, [rdx] ; char of strung2
 
     cmp al, bl ; compare char with string
+    
     je _found
 
 
@@ -74,33 +82,40 @@ main:
     je _done ;if null then end 
 
     inc rsi ; next char
+    call _printf
     jmp _iterate
 
     _found:
+        push rcx        
+
         mov rax, 1           ; write output code 4 for eax
         mov rdi, 1           ; std output code 1
-        mov rsi, msg    ; write message in register ecx
+        mov rcx, msg    ; write message in register ecx
         mov rdx, 100  ; legthh of message in reg ecx 32chars
+        
         syscall;
+        pop rcx
         ret
 
     _done:   ret ; return
 
-    _output1:
-        mov rax, 1           ; write output code 4 for eax
-        mov rdi, 1           ; std output code 1
-        mov rsi, string1     ; write message in register ecx
-        mov rdx, 100  ; legthh of message in reg ecx 32chars
-        syscall;
-        ret
+   ; _printf:
+   ;    push rsi
+   ;    mov rax, 1           ; write output code 4 for eax
+   ;    mov rdi, 1           ; std output code 1
+   ;    mov rsi, msg     ; write message in register ecx
+   ;    mov rdx, 100  ; legthh of message in reg ecx 32chars
+   ;    syscall;
+   ;    pop rsi
+   ;    ret
 
-    _output2:
-        mov rax, 1           ; write output code 4 for eax
-        mov rdi, 1           ; std output code 1
-        mov rsi, string2     ; write message in register ecx
-        mov rdx, 1  ; legthh of message in reg ecx 32chars
-        syscall;
-        ret
+ ;   _output2:
+ ;       mov rax, 1           ; write output code 4 for eax
+  ;      mov rdi, 1           ; std output code 1
+  ;     mov rsi, string2     ; write message in register ecx
+  ;     mov rdx, 1  ; legthh of message in reg ecx 32chars
+  ;      syscall;
+  ;     ret
 
     _sysexit:
         mov rax, 60           ; write output code 4 for eax

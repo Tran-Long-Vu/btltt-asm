@@ -34,10 +34,16 @@ _start:
     mov rdx, lenDispMsg  ; legthh of message in reg ecx
     syscall;
 
+
+
+
     ; output
+    mov rax, msg
+    mov rsi, rax
+
     mov rax, 1           ; write output code 4 for eax
     mov rdi, 1           ; std output code 1
-    mov rsi, input     ; write message in register ecx
+    ;mov rsi, input     ; write message in register ecx
     mov rdx, 32  ; legthh of message in reg ecx 32chars
     syscall;
     mov rax, 60           ; write output code 4 for eax

@@ -1,31 +1,48 @@
-section	.text
-   global main        ;must be declared for using gcc
-	
-main:	                ;tell linker entry point
-   mov ecx,10 ; 
-   mov eax, '1'
-	
-l1:
-   mov [num], eax ; mov 1 into num value
-   mov eax, 4 ; print mode
-   mov ebx, 1 ; printmode
+section .data
+s1: db "string one", 0
+s2: db "s", 0
+not_e: db "non", 13,10
+eq: db "equal",10
 
-   push ecx ; push 10 in stack
+section .text
+global main
+main:
+	mov rsi, s1     ; esi = &s1 ;string
+	mov rdi, s2     ; edi = &s2 ; char
+	xor rdx, rdx    ; edx = 0
+
+loop:
+	mov al, [rsi + rdx]
+	mov bl, [rdi]
+	inc rdx
+	cmp al, bl      ; compare character with string
+	jne not_equal   ; not equal
+
+	cmp al, bl       ; at end?
+	je equal        ; end of both strings
+
+   cmp al, 0; null?
+   jmp exit
+
+	jmp loop        ; equal so far
+not_equal: ; print NE
 	
-   mov ecx, num        ; move num 1 into ecx
-   mov edx, 1        ; move 1 into edx length
-   int 0x80 ; syscall : PRINT THE NUMBER
+	jmp loop
+equal: ; found same string! give a sign
+	push rsi
+       mov rax, 1           ; write output code 4 for eax
+       mov rdi, 1           ; std output code 1
+       mov rsi, eq     ; write message in register ecx
+       mov rdx, 5  ; legthh of message in reg ecx 32chars
+       syscall;
+   pop rsi
 	
-   mov eax, [num] ; eax = 1
-   sub eax, '0' ; minsu 0
-   inc eax ; +! 
-   add eax, '0' ; + 0
-   pop ecx ; pop 10 into ecx
-   loop l1
-	
-   mov eax,1             ;system call number (sys_exit)
-   int 0x80              ;call kernel
-section	.bss
-num resb 1
+exit:
+	mov rax, 0x2000001  ; sys_exit
+	; mov rdi, 0
+	syscall
 
 
+
+
+;https://github.com/HamzaYousuf7/assembly-language-course
