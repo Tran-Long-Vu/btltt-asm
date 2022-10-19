@@ -1,33 +1,9 @@
-; STRING FINDER
-
+; ECHO 64 BIT
 ; COMPILED WITH NASM + LD LINKER
 ; RUN ON UBUNTU LINUX.
+
 ;
-; INPUT of 2 strings.
-; iterate through  both strings. Find length. 
-; 
-;
-;
-;
-; use such iteration to compare bytes.
-; if match, go to next iteration.
-; check NULL to end 
-; record position + count of times appearance,
-; NULL of the long string ends the program
-; 
-; Example:
-; "longcocakaca" & ca
-; s1 and s2
-; iterate "ca". starts with s2[0]. "c"
-; cmp "c" with s1[0]. not match, loop skip.
-; until cmp with s1[4]. "c" and "c". Match 
-; cmp s2[1] = "a". with s1[5]. s1[curretn + 1]
-; cmp "a" with "o". Not match. Skip loop. Back to S2[0]
-; till "ca" match "ca". Record count +1 and position: 6.
-; Record count +2 and pos: 11.
-; check null/end of string
-; end loop 
-; print out count + loop count
+
 
 SECTION .data
 msg1        db      'Please enter your name: ', 0h      ; message string asking user for input

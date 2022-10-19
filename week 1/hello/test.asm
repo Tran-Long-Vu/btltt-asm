@@ -1,55 +1,35 @@
-; test app asm
-
-section .data
-    msg db "Hello world!", 0ah ; var 
-    len equ $-msg
-
-section .bss
-
-
-section .text
-    global main ; fucntion
-
-main:
-    
-    
-    ;call _write
-    call _push
-    call _end
-
-    _write:      
-        mov rsi, msg
-        mov rdx, len       ; length of string to be printed
-
-        mov rdi, 1          ; std output
-        mov rax, 1         ; write mode
-        syscall
-        ret
-    
-    _push:
-    mov al,[rsi] ; first char
-
-    cmp al, 0x0; check null
-    je _popdone
-
-    ;push ax  ;
-    jmp _next  ; loop:
-
-
-    _next: 
-        inc rsi
-        jmp _push
-
-    _popdone:
-        xor rbx,rbx ; code zero
-        pop rsi ; pop back into rsi
-        cmp rbx, len
-        jne _popdone ; if not =len, jump back
-        ;pop rsi 
-        ;ret
-    _end:
-
-        mov rax, 60 ; sys exit reg
-        mov rdi, 0 ; exit successful with ouput 0
-        
-        syscall ; call kernel to end
+SECTION .data
+msg     db      'Hello, brave new world!', 0Ah
+ 
+SECTION .text
+global  _start
+ 
+_start:
+ 
+    mov     rax, msg        ; move the address of our message string into EAX
+    call    strlen          ; call our function to calculate the length of the string
+ 
+    mov     rdx, rax        ; our function leaves the result in EAX
+    mov     rsi, msg        ; NOTE rsi fucntion in x64
+    mov     rbx, 1
+    mov     rax, 1          ; NOTE code 1,1
+    syscall
+ 
+    mov     rbx, 0
+    mov     rax, 60
+    syscall
+ 
+strlen:                     ; this is our first function declaration
+    push    rbx             ; push the value in EBX onto the stack to preserve it while we use EBX in this function
+    mov     rbx, rax        ; move the address in EAX into EBX (Both point to the same segment in memory)
+ 
+nextchar:                   ; this is the same as lesson3
+    cmp     byte [rax], 0
+    jz      finished
+    inc     rax
+    jmp     nextchar
+ 
+finished:
+    sub     rax, rbx
+    pop     rbx             ; pop the value on the stack back into EBX
+    ret                     ; return to where the function was called

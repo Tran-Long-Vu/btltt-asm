@@ -1,7 +1,11 @@
 ; LONG VU TRAN
+; ASCII TO INTEGER ATOI addition
+
+
+
 ; steps: 
 ; 1. input two numbers.
-; 2. add. 
+; 2. add. COnvert ACSII TO INT
 ; 3. output results.
 ;
 ; 2: add

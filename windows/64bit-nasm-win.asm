@@ -1,10 +1,10 @@
 ; WINDOWS 64 BIT HELLO WORLD
-                                                ; Console Message, 64 bit. V1.03
+                                                ; Console Message, 64 bit. 
 NULL              EQU 0                         ; Constants
 STD_OUTPUT_HANDLE EQU -11
 
 extern GetStdHandle                             ; Import external symbols
-extern WriteFile                                ; Windows API functions, not decorated
+extern WriteFile                                ; Windows API functions
 extern ExitProcess
 
 global Start                                    ; Export symbols. The entry point

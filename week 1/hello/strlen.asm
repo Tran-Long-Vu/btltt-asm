@@ -13,7 +13,7 @@ _start:
  
     mov     rbx, msg        ; move the address of our message string into EBX
     mov     rax, rbx        ; move the address in EBX into EAX as well (Both now point to the same segment in memory)
- 
+
 nextchar:
     cmp     byte [rax], 0   ; compare the byte pointed to by EAX at this address against zero (Zero is an end of string delimiter)
     jz      finished        ; jump (if the zero flagged has been set) to the point in the code labeled 'finished'

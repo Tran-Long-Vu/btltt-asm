@@ -1,3 +1,124 @@
+; TRAN LONG VU
+; ADD TWO NUMBERS:
+;
+; A:
+;   take 2 inputs OF ASCII STRING FORMAT
+; B   
+; convert ascii to integer USING ATOI FUNCITON
+;   Atoi function: reference from asmtutor.com
+;          1. iterate through string in RSI
+;          2. check if it is letters from 0-9 in ACSII table
+;          3. sub 48 to convert to decimal
+;          4. ADD value to RAX and mul 10 to represent hudnreds, thousands, ...
+;          5. The last byte is unit line, but it got MUL 10 in the loop. Div the UNIT buyte by 10 to correct.
+;          6. loop ends when NULL is found in the ASCII string. all bytes are converted.
+
+
+
+
+
+;    Example: 531. in RSI
+
+;    Iterate 5. Check integer? Yes
+;     SUB 48: convert 5 string to 5 int
+;    ADD 5 to EAX and MUL 10. -> EAX: 50
+;   Iterate 3. Check integer? Yes
+;   SUB 48 from ascii 3 to integer 3.
+;    ADD 3 to EAX -> EAX = 53. MUL 10 -> EAX = 530.
+;   Iterate 1. Check integer? Yes.
+;    SUB 48 to integer 1. 
+;    ADD to EAX: 531. MUL 10: 5310.
+;    Iterate NULL. Check integer? NO. LOOP ENDS.
+;    Div 10 ->  RAX = 531. 
+;    Function ends at RAX = 531.
+;
+; C 
+; return result with printLF function.
+;   print out RAX.
+;
+;
+
+;
+
+
+
+
+
+
+%include        'functions.asm'
+ 
+SECTION .bss
+input1 resb 255
+input2 resb 255
+
+SECTION .text
+global  _start
+ 
+_start: 
+    ; using std input
+    ; call input
+    push rax
+    push rbx
+    push rsi
+    push rdx 
+
+    mov rax, 0
+    mov rbx, 0
+
+    mov rsi, input1 ; input1
+    mov rdx, 255
+    syscall
+
+    pop rdx
+    pop rsi
+    pop rbx
+    pop rax
+
+
+    mov rax, input1              ;change input1 to int
+    call    atoi       
+
+    add     rdx, rax        ; perform  addition 
+
+    push rax
+    push rbx ; input2
+    push rsi
+    push rdx 
+
+    mov rax, 0
+    mov rbx, 0
+
+    mov rsi, input2 ; input2
+    mov rdx, 255
+    syscall
+    
+    pop rdx
+    pop rsi
+    pop rbx
+    pop rax
+
+    mov rax, input2             ;change input2 to int
+    call    atoi     
+
+    add     rdx, rax        ; perform  addition 
+
+
+
+
+
+
+    mov     rax, rdx        ; move our data result into eax for printing
+    call    iprintLF        ; call  integer printing  linefeed 
+    call    quit            ; call our quit function
+
+
+
+
+
+
+
+; default fucntions from asmtutor.com
+
 ;------------------------------------------
 ; void iprint(Integer number)
 ; Integer printing function (itoa)
@@ -42,7 +163,7 @@ iprintLF:
     push    rax             ; push eax onto the stack to preserve it while we use the eax register in this function
     mov     rax, 0Ah        ; move 0Ah into eax - 0Ah is the ascii character for a linefeed
     push    rax             ; push the linefeed onto the stack so we can get the address
-    mov     rax, esp        ; move the address of the current stack pointer into eax for sprint
+    mov     rax, rsp        ; move the address of the current stack pointer into eax for sprint
     call    sprint          ; call our sprint function
     pop     rax             ; remove our linefeed character from the stack
     pop     rax             ; restore the original value of eax before our function was called
@@ -112,6 +233,7 @@ atoi:
     push    rcx             ; preserve ecx on the stack to be restored after function runs
     push    rdx             ; preserve edx on the stack to be restored after function runs
     push    rsi             ; preserve esi on the stack to be restored after function runs
+
     mov     rsi, rax        ; move pointer in eax into esi (our number to convert)
     mov     rax, 0          ; initialise eax with decimal value 0
     mov     rcx, 0          ; initialise ecx with decimal value 0
