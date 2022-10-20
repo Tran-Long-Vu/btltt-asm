@@ -1,0 +1,40 @@
+
+get 4 vars: 
+big string
+small string
+array
+size
+
+data: sample strings2
+
+code:
+
+get input string1 and strings2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

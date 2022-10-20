@@ -1,3 +1,6 @@
+
+
+; code run on Ubuntu 64bit using nasm.
 ; TRAN LONG VU - STRING REVERSE
 ; 1. INPUT STRING
 ; 2. REVERSE STRING
@@ -89,14 +92,14 @@ _reverse:; push byte into stack and pop back.
         xor rcx, rcx; rcx code 0
 
         .pushLoop:
-        lodsb ; load byte from RSI(SIL) into RAX = mov RAX, SI
+        lodsb ; load single byte from RSI(SIL) into RAX = mov RAX, SI
         
         
-        cmp al, 0xa ; check NULL to pop.
+        cmp al, 0xa ; check NULL(end of string) to pop.
         jng .pop ; if not greater, pop
 
         push ax ; push the 16b char from RAX to stack
-
+                ; cannot push 8bit. wrong operand
         inc cx; counter +1
         jmp .pushLoop
 
@@ -106,11 +109,12 @@ _reverse:; push byte into stack and pop back.
 
         .popLoop:
         pop ax ; after string push, pop back char to ax.
-        stosb ; 
+        stosb ; PUSH single byte from AX to RSI.
         dec cx  ; decrease length of cx
         test cx,cx ; cx = 1 or 0
         jz .done ; if 0, end prog
         jmp .popLoop ; loop the pop 
+        ; functions ends with RSI having the converted string.
         .done:
         mov     rax, rsi ; return convrted to rax 
         

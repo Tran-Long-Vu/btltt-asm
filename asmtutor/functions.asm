@@ -42,7 +42,7 @@ iprintLF:
     push    rax             ; push eax onto the stack to preserve it while we use the eax register in this function
     mov     rax, 0Ah        ; move 0Ah into eax - 0Ah is the ascii character for a linefeed
     push    rax             ; push the linefeed onto the stack so we can get the address
-    mov     rax, esp        ; move the address of the current stack pointer into eax for sprint
+    mov     rax, rsp        ; move the address of the current stack pointer into eax for sprint
     call    sprint          ; call our sprint function
     pop     rax             ; remove our linefeed character from the stack
     pop     rax             ; restore the original value of eax before our function was called
@@ -50,7 +50,7 @@ iprintLF:
  
  
 ;------------------------------------------
-; int slen(String message)
+; int slen(String message) from RAX
 ; String length calculation function
 slen:
     push    rbx
@@ -117,37 +117,86 @@ atoi:
     mov     rax, 0          ; initialise eax with decimal value 0
     mov     rcx, 0          ; initialise ecx with decimal value 0
  
-.multiplyLoop:
-    xor     rbx, rbx        ; resets both lower and uppper bytes of ebx to be 0
-    mov     bl, [rsi+rcx]   ; move a single byte into ebx register's lower half
-    cmp     bl, 48          ; compare ebx register's lower half value against ascii value 48 (char value 0)
-    jl      .finished       ; jump if less than to label finished
-    cmp     bl, 57          ; compare ebx register's lower half value against ascii value 57 (char value 9)
-    jg      .finished       ; jump if greater than to label finished
- 
-    sub     bl, 48          ; convert ebx register's lower half to decimal representation of ascii value
-    add     rax, rbx        ; add ebx to our interger value in eax
-    mov     rbx, 10         ; move decimal value 10 into ebx
-    mul     rbx             ; multiply eax by ebx to get place value
-    inc     rcx             ; increment ecx (our counter register)
-    jmp     .multiplyLoop   ; continue multiply loop
- 
-.finished:
-    cmp     rcx, 0          ; compare ecx register's value against decimal 0 (our counter register)
-    je      .restore        ; jump if equal to 0 (no integer arguments were passed to atoi)
-    mov     rbx, 10         ; move decimal value 10 into ebx
-    div     rbx             ; divide eax by value in ebx (in this case 10)
- 
-.restore:
-    pop     rsi             ; restore esi from the value we pushed onto the stack at the start
-    pop     rdx             ; restore edx from the value we pushed onto the stack at the start
-    pop     rcx             ; restore ecx from the value we pushed onto the stack at the start
-    pop     rbx             ; restore ebx from the value we pushed onto the stack at the start
+    .multiplyLoop:
+        xor     rbx, rbx        ; resets both lower and uppper bytes of ebx to be 0
+        mov     bl, [rsi+rcx]   ; move a single byte into ebx register's lower half
+        cmp     bl, 48          ; compare ebx register's lower half value against ascii value 48 (char value 0)
+        jl      .finished       ; jump if less than to label finished
+        cmp     bl, 57          ; compare ebx register's lower half value against ascii value 57 (char value 9)
+        jg      .finished       ; jump if greater than to label finished
+    
+        sub     bl, 48          ; convert ebx register's lower half to decimal representation of ascii value
+        add     rax, rbx        ; add ebx to our interger value in eax
+        mov     rbx, 10         ; move decimal value 10 into ebx
+        mul     rbx             ; multiply eax by ebx to get place value
+        inc     rcx             ; increment ecx (our counter register)
+        jmp     .multiplyLoop   ; continue multiply loop
+    
+    .finished:
+        cmp     rcx, 0          ; compare ecx register's value against decimal 0 (our counter register)
+        je      .restore        ; jump if equal to 0 (no integer arguments were passed to atoi)
+        mov     rbx, 10         ; move decimal value 10 into ebx
+        div     rbx             ; divide eax by value in ebx (in this case 10)
+    
+    .restore:
+        pop     rsi             ; restore esi from the value we pushed onto the stack at the start
+        pop     rdx             ; restore edx from the value we pushed onto the stack at the start
+        pop     rcx             ; restore ecx from the value we pushed onto the stack at the start
+        pop     rbx             ; restore ebx from the value we pushed onto the stack at the start
+        ret
+
+sinput:
+    push rdx
+    push rsi
+    push rbx
+    push rax
+
+    mov     rbx, 0 ; readmode mother string
+    mov     rsi, rax
+
+    mov     rdx, 100
+    mov     rax, 0
+    syscall
+
+    pop rax
+    pop rbx
+    pop rsi
+    pop rdx
     ret
 
+    compare:
+    
+    ; rsi is main iterator 
+    ; rcx is sub iterator
+
+    .reset:
+    xor     rcx, rcx
+    .strcmp:
+    mov     dh, [rdi + rcx]
+    cmp     dh, 0xa                  
+    jz      .found                  ; meet end of substr
+    mov     dl, [rsi + rcx]
+    cmp     dl, 0xa
+    jz      .notfound               ; meet end of str
+    inc     rcx
+    cmp     dl, dh
+    je      .strcmp
+    inc     rsi                     ; next loop
+    jmp     .reset
+
+    .found:
+        mov        rax, 1
+        jmp        .finish
+    .notfound:
+        mov        eax, -1
+        jmp        .finish
+
+    .finish:    
+    ret  
 
 
- 
+
+
 ;------------------------------------------
 ; void exit()
 ; Exit program and restore resources
