@@ -54,6 +54,8 @@ SECTION .bss
     string2      resb    12
     arr         resb    100
     size        resd    1 ; dword = 32b
+    subcount    resb 1
+    posarray         resb 100
 SECTION .text
 global  _start
  
@@ -77,38 +79,55 @@ _start:
     ; call input sub string
     mov rax , string2
     call sinput
- 
+
+    call compare
     ; compare here.
     
-;    mov rdi, string2 ; ca
-;    mov rsi, string1 ; longcakaca
-;    call compare
 
-;    cmp rax,9
-;    jz  .yes
-;    cmp rax,-1
-;    jz  .no
-
-;    .yes:
-;    mov rax, msg3
-;    call sprint
-    
-;    .no:
-;    mov rax, msg4
-;    call sprint
-
-
-
-
-    mov     rax, string1    ; move our buffer into eax 
+    mov     rax, string1 ; substring counts   ; move our buffer into eax 
     call    sprint          ; call our print function
 
-    mov     rax, string2     ; move our buffer into eax 
+    mov     rax, string2 ; position    ; move our buffer into eax 
     call    sprint         ; print
- 
-
-
-
 
     call    quit
+_compare:
+        ; init memory:
+        .init: ; initialzite stack for looping
+            mov rax, arr 
+            mov [rbp - 8],rax ;  move content of array into rbp
+            xor eax,eax ; reset eax
+            
+        .loop:
+            mov rdi, string2 ; substring = RDI
+            mov rsi, string1 ; bigstring = RSI
+            movzx rdx, ax ; mov 16b (substring) from rax into 64b; maximize memory with 64b reg using 16b 
+            
+            ; call pos ; position finder. returns pos in array type.
+            ; rcx = pointer pos. 
+            ; rsi = bigString
+            ; pos returns eax the pos, or all pos of the big string
+
+            ; if not found any, eax= -1
+
+            mov rdi, [rbp - 8] ; init stack memory
+
+            cmp eax, -1 ; check not found
+            jz .printResult ; if not found end prog
+            ; found? load byte into 
+            stosb ; mov 8bit from RAX to RDI? optimizes memory, again.
+            ; mov found position byte from rax into rdi
+            mov [rbp - 8], rdi ; malloc. found pos 8b into base pointer.
+
+            inc eax ; count loop +1
+            jmp .loop
+            ;...
+        .printResult:
+        ;...
+
+_findPos:
+    ;abc
+
+
+    
 
