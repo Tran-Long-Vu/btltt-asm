@@ -45,7 +45,7 @@
 
 
 
-%include        'functions.asm'
+;%include        'functions.asm'
  
 SECTION .bss
 input1 resb 255

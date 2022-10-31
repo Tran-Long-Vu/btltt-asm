@@ -27,7 +27,9 @@ printLoop:
     call    sprint          ; call our string print function
     pop     rax             ; remove last character from the stack to move esp forward
     cmp     rcx, 0          ; have we printed all bytes we pushed onto the stack?
+    
     jnz     printLoop       ; jump is not zero to the label printLoop
+
  
     pop     rsi             ; restore esi from the value we pushed onto the stack at the start
     pop     rdx             ; restore edx from the value we pushed onto the stack at the start
@@ -55,7 +57,7 @@ iprintLF:
  
  
 ;------------------------------------------
-; int slen(String message) from RAX
+; int slen(String message) from RAX, output RAX
 ; String length calculation function
 slen:
     push    rbx
@@ -78,7 +80,7 @@ finished:
 ; String printing function
 sprint:
     push    rdx
-    push    rcx
+    push    rsi
     push    rbx
     push    rax
     call    slen
@@ -92,7 +94,7 @@ sprint:
     syscall
  
     pop     rbx
-    pop     rcx
+    pop     rsi
     pop     rdx
     ret
  
@@ -159,7 +161,7 @@ sinput:
     mov     rbx, 0 ; readmode mother string
     mov     rsi, rax
 
-    mov     rdx, 100
+    mov     rdx, 102
     mov     rax, 0
     syscall
 
@@ -201,6 +203,47 @@ printArray:  ; print n elements of array arr
     mov     rsp, rbp ; return memory
     pop     rbp
     ret    
+itoa:   ; int to ascii, return size in rax, pointer in rsi
+    push    rbp    
+    mov     rbp, rsp
+    push    rbx
+    push    rcx
+    mov     ebx, edi      ; save int to ebx
+    
+    ; dynamic memory allocation to make room to create string
+    xor     rdi, rdi     
+    mov     rax, 12
+    syscall                     ; sys_brk(0) fails, return current program break
+    mov     rdi, rax
+    add     rdi, 10             
+    mov     rax, 12
+    syscall                     ; sys_brk(current_break + 10)
+    dec     rax
+    mov     rsi, rax            ; rsi = *(str + 9)
+    mov     eax, ebx
+    mov     rdi, rsi
+    mov     ebx, 10
+    
+    .iter:
+    xor     edx, edx
+    div     ebx
+    or      dl, 0x30
+    mov     [rdi], dl
+    dec     di
+    test    eax, eax
+    jz      .done
+    jmp     .iter
+
+    .done:
+    sub     rsi, rdi
+    mov     rax, rsi
+    mov     rsi, rdi
+    inc     rsi
+    pop     rcx
+    pop     rbx
+    mov     rsp, rbp
+    pop     rbp
+    ret  
 
 
 ;------------------------------------------

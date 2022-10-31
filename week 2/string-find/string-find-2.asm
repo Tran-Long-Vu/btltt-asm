@@ -3,22 +3,25 @@
 
 ; COMPILED WITH NASM + LD LINKER
 ; RUN ON UBUNTU LINUX.
-; NOTE: partially working
+; NOTE: ITERATION COMPLETE
+; MISSING RECORDING FUNCTION.
 ;
-;
+; NOTE: FIX THE OUTPUT FUCNTION
 %include "functions.asm"
+
+
 
 SECTION .data
 msg1        db      'motherstring?: ', 0h      ; message string asking user for input
 msg2        db      'Substring?: ', 0h                       ; message string to use after user has entered their name
 msg3        db      'found.' , 0h 
+
 SECTION .bss
     bigstring      resb    30
     substring         resb    12
-    arr         resb    100
-    size        resd    1 ; dword = 32b
 
-    subCount    resd 1      ;size of position array
+
+          ;size of position array
     position         resb 100
 
 SECTION .text
@@ -48,35 +51,48 @@ _start:
 
     call _compareLoop
     ; compare here. 
-
     
 
-    mov rax, bigstring
-    call sprintLF
+    ; print count
+
+    mov rax, r12 ; integer
+    
+    call itoa ; has no end of string.
+    call sprint
+
+
+
+
 
     call  quit
     _compareLoop:
         .init:
-         
+        push rbx
+        push rsi
+        push rdi
+        push r10
+        push r11
+        xor r12,r12 ; count
 
         mov rdi, substring
         mov rsi, bigstring
         mov r10,0 ; sub index
         mov r11,0 ; str index
         
+        
         .bigLoop:
-            mov bl, byte [rdi+r10]
+            mov r15b, byte [rdi+r10]
             mov r14b, byte [rsi+r11]
 
             cmp r14b, 0xa; check null bigstring
             je .done ; end  
             ;if not, enter subLoop              
             .subLoop:
-                cmp bl, 0xa; if sub ends NULL, record
+                cmp r15b, 0xa; if sub ends NULL, record
                 je .record
                 ; if not NULL? compare               
 
-                cmp bl, r14b; if [byte]: sub = big. 
+                cmp r15b, r14b; if [byte]: sub = big. 
                 je .bothNext ; if equal:   
                 ; if not equal
                 jmp .resetSub
@@ -84,9 +100,15 @@ _start:
             .record:
                 ; record pos +count             
                 ; .resetSub ; reset Sub
+                ; record count  in R12.
+                inc r12
+                
+                ; record position in: R13. ( bigstring)
+                 
+
                 ; bigNext
                 
-                mov rax, msg3; test record
+                
                 ;call sprintLF 
                 
                 jmp .resetSub
@@ -107,6 +129,12 @@ _start:
                 
             .done:
             
+
+            pop r11
+            pop r10
+            pop rdi
+            pop rsi
+            pop rbx
             ret
                 
 

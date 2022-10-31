@@ -1,10 +1,12 @@
-section .bss
+%include "functions.asm"
+
+section .bss ; var
     string      resb    105
     substr      resb    11
     arr         resb    100
     size        resd    1
     
-section .data
+section .data ; const
     strReq      db  's = ', 0
     substrReq   db  'c = ', 0
     
@@ -39,7 +41,7 @@ _start:
     
     ; start counting...
     mov     rax, arr
-    mov     [rbp - 8], rax
+    mov     [rbp - 8], rax ; memory alloc(malloc rpp)
     xor     eax, eax
 
     .iter:
@@ -50,18 +52,19 @@ _start:
     mov     rdi, [rbp - 8]
     cmp     eax, -1
     jz      .finish
-    stosb                      
+    stosb             
+
     mov     [rbp - 8], rdi
     inc     eax           
     jmp     .iter
     
     .finish:
-    sub     rdi, arr        ; find size
-    mov     [size], edi       ; save to size variable
-    call    itoa
-    mov     rdi, 1
-    mov     rdx, rax
-    call    println
+    sub     rdi, arr        ; find size. size = whole arr - missing pieces.
+    mov     [size], edi     ; save to size variable
+    call    itoa            ; change from int to string.
+    mov     rdi, 1          ; output code 1
+    mov     rdx, rax        ; mov rdx.
+    call    println         ; println
     
     mov     rdi, arr
     mov     rsi, [size]
@@ -82,7 +85,7 @@ pos:    ; pos(substr, str, i) return in eax first position of substring substr i
     xor     rcx, rcx
     .strcmp:
     mov     dh, [rdi + rcx]
-    cmp     dh, 0xa                  
+    cmp     dh, 0xa         ; null         
     jz      .found                  ; meet end of substr
     mov     dl, [rsi + rcx]
     cmp     dl, 0xa
@@ -90,7 +93,7 @@ pos:    ; pos(substr, str, i) return in eax first position of substring substr i
     inc     rcx
     cmp     dl, dh
     je      .strcmp
-    inc     rsi                     ; next loop
+    inc     rsi                     ; next sub+ loop
     jmp     .iter
     
     .found:
@@ -102,6 +105,6 @@ pos:    ; pos(substr, str, i) return in eax first position of substring substr i
     jmp        .finish
 
     .finish:
-    mov        rsp, rbp
-    pop        rbp
+    mov        rsp, rbp ; put in stack pointer
+    pop        rbp ; return rbp to original value
     ret   
