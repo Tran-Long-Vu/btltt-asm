@@ -84,7 +84,6 @@ findSubStr:
 	StrSIterate:
 		mov bl, byte [rdi+r10] ;big
 		mov r14b, byte [rsi+r11] ;sub
-
 		cmp bl, r14b
 		jne next
 		StrCIterate:
@@ -125,7 +124,7 @@ numToString:
 	inc rdx
 	stackToString:
 		pop rbx
-		add bl, 0x30
+		add bl, 0x30;48
 		mov byte[rsi], bl
 		inc rsi
 		dec r14

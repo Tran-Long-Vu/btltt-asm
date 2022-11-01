@@ -6,7 +6,8 @@
 ; NOTE: ITERATION COMPLETE
 ; MISSING RECORDING FUNCTION.
 ;
-; NOTE: FIX THE OUTPUT FUCNTION
+; NOTE: FIX THE input function. infinite outputs
+; weakness: if sub is end of substring, it is not counted.
 %include "functions.asm"
 
 
@@ -14,7 +15,7 @@
 SECTION .data
 msg1        db      'motherstring?: ', 0h      ; message string asking user for input
 msg2        db      'Substring?: ', 0h                       ; message string to use after user has entered their name
-msg3        db      'found.' , 0h 
+msg3        db      'found' , 0h 
 
 SECTION .bss
     bigstring      resb    30
@@ -47,7 +48,6 @@ _start:
     ; call input sub string
     mov rax , substring
     call sinput
-    
 
     call _compareLoop
     ; compare here. 
@@ -56,10 +56,9 @@ _start:
     ; print count
 
     mov rax, r12 ; integer
+    add al, 48
+    call fastPrint
     
-    call itoa ; has no end of string.
-    call sprint
-
 
 
 
@@ -136,6 +135,7 @@ _start:
             pop rsi
             pop rbx
             ret
+    
                 
 
             
