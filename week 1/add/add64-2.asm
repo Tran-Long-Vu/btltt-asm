@@ -76,7 +76,7 @@ _start:
 
 
     mov rax, input1              ;change input1 to int
-    call    atoi       
+    call    atoi       ; returns rax as int
 
     add     rdx, rax        ; perform  addition 
 
