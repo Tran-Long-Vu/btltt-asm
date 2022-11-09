@@ -40,15 +40,11 @@
 section .data
 
     msg db "enter no. of fibonacci"
-
-
-
-  
-
+    
 section .bss
-    n resb 4
-
-
+    n resw 64
+    outputIntStr resb 10
+    buffer resb 64
 section .text
 global  _start
  
@@ -100,17 +96,12 @@ _fibonacciCalc:
 
             ; change int to string 
             mov rax, r12
-            call itoa; NOTE: RESEARCH MORE ON ITOA
-
-            ; print (next)
-
-
             
+            ; print (next)
+            call itos
 
-
-
-
-
+            mov rax, outputIntStr
+            call sprintLF
             inc r9
             jmp .loop1
             .done:
@@ -125,6 +116,13 @@ _quit:
 
 
 
+    .restore:
+        
+        pop     rsi             ; restore esi from the value we pushed onto the stack at the start
+        pop     rdx             ; restore edx from the value we pushed onto the stack at the start
+        pop     rcx             ; restore ecx from the value we pushed onto the stack at the start
+        pop     rbx             ; restore ebx from the value we pushed onto the stack at the start
+        ret
 
 
 

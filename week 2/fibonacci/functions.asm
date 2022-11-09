@@ -204,48 +204,6 @@ printArray:  ; print n elements of array arr
     pop     rbp
     ret    
 
-itoa:   ; int to ascii, return size in rax, pointer in rsi
-    push    rbp      
-    mov     rbp, rsp 
-    push    rbx
-    push    rcx
-    mov     ebx, edi      ; save int to ebx
-    
-    ; dynamic memory allocation to make room to create string
-    xor     rdi, rdi     
-    mov     rax, 12
-    syscall                     ; sys_brk(0) fails, return current program break
-    mov     rdi, rax
-    add     rdi, 10             
-    mov     rax, 12
-    syscall                     ; sys_brk(current_break + 10)
-    dec     rax
-    mov     rsi, rax            ; rsi = *(str + 9)
-    mov     eax, ebx
-    mov     rdi, rsi
-    mov     ebx, 10
-    
-    .iter:
-    xor     edx, edx
-    div     ebx
-    or      dl, 0x30
-    mov     [rdi], dl
-    dec     di
-    test    eax, eax
-    jz      .done
-    jmp     .iter
-
-    .done:
-    sub     rsi, rdi
-    mov     rax, rsi
-    mov     rsi, rdi
-    inc     rsi
-    pop     rcx
-    pop     rbx
-    mov     rsp, rbp
-    pop     rbp
-    ret  
-
 
 fastPrint: ; rax
     push    rdx
@@ -268,6 +226,9 @@ fastPrint: ; rax
     pop     rdx
 
     ret
+
+
+
 
 ;------------------------------------------
 ; void exit()

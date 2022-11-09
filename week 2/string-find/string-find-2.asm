@@ -55,8 +55,7 @@ _start:
 
     ; print count
 
-    mov rax, r12 ; integer
-    add al, 48
+    
     call fastPrint
     
 
