@@ -91,8 +91,9 @@ sprint:
     mov     rsi, rax ; print content
     mov     rbx, 1
     mov     rax, 1
+    push r11
     syscall
- 
+    pop r11
     pop     rbx
     pop     rsi
     pop     rdx
@@ -164,7 +165,7 @@ sinput:
     mov     rdx, 102
     mov     rax, 0
     syscall
-
+    
     pop rax
     pop rbx
     pop rsi
@@ -228,10 +229,73 @@ fastPrint: ; rax
     ret
 
 
+itos:		;input = rax, output string = outputIntStr, output string length = rdi
+	mov rbx, 10
+	mov rdi, 0
+	mov rdx, 0
+	pushLoop:
+		div rbx
+		push rdx
+		mov rdx, 0
+		inc rdi
+		cmp rax, 0
+		jne pushLoop
+	mov r12, 0
+	popLoop:
+		pop rbx
+		add bl, '0'
+		mov byte[buffer+r12], bl
+		inc r12
+		cmp r12, rdi	
+		jne popLoop
+	ret
+
+itoa:
+    .init:
+    push r15
+    push rcx
+    push rdx
+    push rsi
+    push rax
+    push rbx
+    mov qword [buffer],0
+    mov r15, 0
+
+    mov rcx, 0 ; counter
+    mov     rdx, 0          ; empty edx
+    mov     rsi, 10         ; mov 10 into esi
+    
+    .divideLoop:
+        inc     rcx             ; count each byte to print - number of characters
+        div rsi ; divide rax by 10
+        push rdx ; push remainder
+        mov rdx, 0 ; reset
+        cmp     rax, 0          ; can the integer be divided anymore?
+        jnz     .divideLoop      ; jump if not zero to the label divideLoop
+
+    .popLoop:
+        pop rbx ;return from stack
+        add bl, '0'; change byte to string
+        mov byte [buffer+r15], bl ; move char to buffer
+
+        inc r15
+        cmp rcx,r15
+        jne .popLoop
+        jmp .restore
+    .restore:   
+        
+        pop rbx
+        pop rax
+        pop rsi
+        pop rdx
+        pop rcx
+        pop r15    
+        ret
 
 
 ;------------------------------------------
 ; void exit()
+
 ; Exit program and restore resources
 quit:
     mov     rbx, 0

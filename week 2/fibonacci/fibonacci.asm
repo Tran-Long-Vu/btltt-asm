@@ -74,14 +74,7 @@ _fibonacciCalc:
             mov r10, 0 ; first
             mov r14, 1 ; second
             mov r12, 0 ; next
-            .addtest:
-            push rax
-            push rbx
-            mov rax, 13
-            mov rbx, 8
-            add rax,rbx
-            pop rbx
-            pop rax
+            
             .loop1:
             cmp r9, r13
             je .done ; check end of loop
@@ -95,13 +88,13 @@ _fibonacciCalc:
                     mov r14, r12 ; second = next
 
             ; change int to string 
-            mov rax, r12
-            
+            mov rax, 0
+            add rax, r12
             ; print (next)
-            call itos
-
-            mov rax, outputIntStr
+            call itoa
+            mov rax, buffer
             call sprintLF
+
             inc r9
             jmp .loop1
             .done:
@@ -112,17 +105,6 @@ _quit:
     mov rax, 60
     mov rbx, 0
     syscall 
-
-
-
-
-    .restore:
-        
-        pop     rsi             ; restore esi from the value we pushed onto the stack at the start
-        pop     rdx             ; restore edx from the value we pushed onto the stack at the start
-        pop     rcx             ; restore ecx from the value we pushed onto the stack at the start
-        pop     rbx             ; restore ebx from the value we pushed onto the stack at the start
-        ret
 
 
 

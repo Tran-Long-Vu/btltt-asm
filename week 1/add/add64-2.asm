@@ -267,26 +267,7 @@ atoi:
     ret
 
 
-itos:		;input = rax, output string = outputIntStr, output string length = rdi
-	mov rbx, 10
-	mov rdi, 0
-	mov rdx, 0
-	pushLoop:
-		div rbx
-		push rdx
-		mov rdx, 0
-		inc rdi
-		cmp rax, 0
-		jne pushLoop
-	mov r12, 0
-	popLoop:
-		pop rbx
-		add bl, '0'
-		;mov byte[outputIntStr+r12], bl
-		inc r12
-		cmp r12, rdi	
-		jne popLoop
-	ret
+
 
 
 

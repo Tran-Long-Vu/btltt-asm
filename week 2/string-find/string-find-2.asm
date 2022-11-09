@@ -16,15 +16,14 @@ SECTION .data
 msg1        db      'motherstring?: ', 0h      ; message string asking user for input
 msg2        db      'Substring?: ', 0h                       ; message string to use after user has entered their name
 msg3        db      'found' , 0h 
-
+space       db      ' '
 SECTION .bss
     bigstring      resb    30
     substring         resb    12
-
-
+    buffer resb 64
           ;size of position array
-    position         resb 100
-
+    position         resb 64
+    
 SECTION .text
 global  _start
  
@@ -55,10 +54,13 @@ _start:
 
     ; print count
 
+    mov rax, r12 ; integer
+    call itoa
+    mov rax, buffer
+    call sprintLF
     
-    call fastPrint
-    
-
+    mov rax, position
+    call sprintLF
 
 
 
@@ -79,8 +81,8 @@ _start:
         
         
         .bigLoop:
-            mov r15b, byte [rdi+r10]
-            mov r14b, byte [rsi+r11]
+            mov r15b, byte [rdi+r10]; sub
+            mov r14b, byte [rsi+r11]; big
 
             cmp r14b, 0xa; check null bigstring
             je .done ; end  
@@ -99,18 +101,23 @@ _start:
                 ; record pos +count             
                 ; .resetSub ; reset Sub
                 ; record count  in R12.
-                inc r12
                 
-                ; record position in: R13. ( bigstring)
-                 
+                ; record position in: R13. (bigstring)
+                push rax
+                push rbx
 
-                ; bigNext
                 
+                mov rax, r11
+                add al, '0' ; convert to ascii
+                mov byte [position+r12], al ; buffer of pos
                 
-                ;call sprintLF 
-                
+
+
+                pop rbx
+                pop rax               
+                inc r12
                 jmp .resetSub
-                jmp .bigNext
+                
                 
             .bigNext:
                 inc r11
