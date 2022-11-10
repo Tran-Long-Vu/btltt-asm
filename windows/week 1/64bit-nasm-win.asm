@@ -10,7 +10,7 @@ extern ExitProcess
 global Start                                    ; Export symbols. The entry point
 
 section .data                                   ; Initialized data segment
- Message        db "Console Message 64", 0Dh, 0Ah
+ Message        db "Hello World", 0Dh, 0Ah
  MessageLength  EQU $-Message                   ; Address of this line ($) - address of Message
 
 section .bss                                    ; Uninitialized data segment
