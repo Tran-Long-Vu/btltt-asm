@@ -1,0 +1,3 @@
+﻿  Assembling main.asm...
+main.asm(13): warning A4014: instructions and initialized data not supported in BSS segments
+  helloworld-asm.vcxproj -> F:\Viettel\vcs 2022\viettel-asm\viettel-asm\masm\own-code\helloworld-asm\Debug\helloworld-asm.exe

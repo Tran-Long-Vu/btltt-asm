@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "a20ec058-85f8-42a7-bf62-801ee4fed669": {
+      "ProjectGuid": "a20ec058-85f8-42a7-bf62-801ee4fed669",
+      "DisplayName": "helloworld-asm",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
