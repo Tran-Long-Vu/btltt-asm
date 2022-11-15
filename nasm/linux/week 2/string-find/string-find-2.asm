@@ -108,7 +108,7 @@ _start:
 
                 
                 mov rax, r11
-                add al, '0' ; convert to ascii
+                add al, '0' ; convert to ascii itoa
                 mov byte [position+r12], al ; buffer of pos
                 
 

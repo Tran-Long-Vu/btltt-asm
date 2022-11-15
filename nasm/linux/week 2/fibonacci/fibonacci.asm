@@ -73,23 +73,23 @@ _fibonacciCalc:
             mov r9, 0 ; c
             mov r10, 0 ; first
             mov r14, 1 ; second
-            mov r12, 0 ; next
+            mov r15, 0 ; next
             
             .loop1:
             cmp r9, r13
             je .done ; check end of loop
             cmp r9 , 1
             jg .loop2
-            mov r12, r9 ; next = c
+            mov r15, r9 ; next = c
                 .loop2:
                     add r10, r14
-                    mov r12, r10 ; next = first + second
+                    mov r15, r10 ; next = first + second
                     mov r10, r14 ; first = second
-                    mov r14, r12 ; second = next
+                    mov r14, r15 ; second = next
 
             ; change int to string 
             mov rax, 0
-            add rax, r12
+            add rax, r15
             ; print (next)
             call itoa
             mov rax, buffer

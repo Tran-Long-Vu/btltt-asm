@@ -18,10 +18,10 @@ int count_carry(string a, string b)
     while (len_a != 0 || len_b != 0) {
  
         // Assigning the ascii value of the character
-        int x = 0, y = 0;
+        int x = 0, y = 0; ; // ascii to int // atoi
         if (len_a > 0) {
-            x = a[len_a - 1] - '0';
-            len_a--;
+            x = a[len_a - 1] - '0'; //  atoi single byte
+            len_a--; 
         }
         if (len_b > 0) {
             y = b[len_b - 1] - '0';
