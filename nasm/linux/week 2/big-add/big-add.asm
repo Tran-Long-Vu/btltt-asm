@@ -48,6 +48,12 @@ _start:
     ; move to array loop:
     call _bigSum
     ; add sum 20b
+
+    ; bigSum returns sum in integer
+    ; call itoa
+
+    ; mov rax, sum
+    ; call sprint
     call    quit            ; call our quit function
 
 _bigSum: ;(num1, num2) ; retturns: SUM in array
@@ -59,34 +65,37 @@ _bigSum: ;(num1, num2) ; retturns: SUM in array
     .bigLoop:
         ; cmp len-a,0
         ;cmp len-b, 0
+        ; if both not 0, loop all
         ;if meet zero, done
         jz .done
         jmp .loopa
-    .loopa: ; call atoi in string a
-        ; sub byte rxx, str [len_a - 1]
-        ; call atoi
-
-        ; return single byte in var x
-
-        ; dec len-a 
+    .loopa: 
         ; cmp len-a > 0
-        ; jg loopa ; if = 0 jmp b
+        ; jg loopa ; 
+        ; if = len-a = 0; (end of string a)
+        ; jmp loopb x = 0
+    .loopa2:
+        ; call atoi  byte string a
 
-        ; jmp diffenrent b
+        ; mov al, byte str [len_a - 1]; 
+        ; call atoi ; byte al now int
+        ; mov x, al ; return single byte in var x
+        ; dec len-a 
+        ; jmp loopb
 
-    .loopb:; call atoi in string b
-        ; call atoi in string b
-        ; sub byte rxx, str [len_b - 1]
-        ; call atoi
-
-        ; return single byte in var y
-
-        ; dec len-b
+    .loopb:
         ; cmp len-b > 0
-        ; jg to addition
-        ; if = 0 keep jumping
+        ; jg loopb2
+        ; jmp  addition ; if end? y = 0
+    .loopb2:
+        ; call atoi  byte string b
 
-        ; add single byte
+        ; mov al, byte str [len_b - 1]; 
+        ; call atoi ; byte al now int
+        ; mov y, al ; return single byte in var x
+        ; dec len-b
+        ; jmp addition
+
 
     .addition:
         ; var sum: rxx
@@ -94,7 +103,10 @@ _bigSum: ;(num1, num2) ; retturns: SUM in array
         ; add x,y 
         ; add x, carry
 
-        ; save byte [sum] in rxx as result
+        ; save byte [sum -1] in rxx as result
+        
+        ; record max sum in case.
+        ; to print sum need legnth; based on a/b
 
     .carry:
         ;cmp sum, 10
@@ -104,7 +116,7 @@ _bigSum: ;(num1, num2) ; retturns: SUM in array
     .carry2;
         ; sum: rxx ;carry = 1
         ; sub sum, 10
-        ; jmp 
+        ; jmp .bigLoop
 
 
     .done:
