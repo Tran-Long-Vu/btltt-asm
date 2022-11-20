@@ -4,10 +4,10 @@
  int sumofarray(int a[],int n)
  {
  	int min,max,i;
- 	min=max=a[0];
+ 	min=max=a[0]; // first number a0
     for(i=1; i<n; i++)
     {
-         if(min>a[i])
+         if(min>a[i]) // a < min
 		  min=a[i];   
 		   if(max<a[i])
 		    max=a[i];       

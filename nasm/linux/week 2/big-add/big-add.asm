@@ -5,7 +5,9 @@
 ; RIGHT TO LEFT NUM-ARRAY
 ;
 ;
+;
 
+;
 
 %include        'functions.asm'
  
@@ -13,11 +15,12 @@ SECTION .bss
 input1 resb 255
 input2 resb 255
 buffer resb 64
+len_a db 64
+len_b db 64
 
 SECTION .data
+; the array i8s the string itself
 
-array1 dq 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-array2 dq 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 carry db 0
 
 SECTION .text
@@ -30,14 +33,22 @@ _start:
     mov rax, input1
     call sinput
 
-    mov rax, input1
+    mov rax, input1 ;
+    call slen ; length now in rax
+    mov len_a, rax
+
+    ;mov rax, input1
     ;call atoi ; rax now integer
     ;mov [input1], rax; integer input
 
     mov rax, input2
     call sinput
 
-    mov rax, input2
+    mov rax, input2 ;
+    call slen ; length now in rax
+    mov len_b, rax
+ 
+    ;mov rax, input2
     ;call atoi ; rax now integer
     ;mov [input2], rax; integer input
 
@@ -58,7 +69,16 @@ _start:
 
 _bigSum: ;(num1, num2) ; retturns: SUM in array
     .init:
-        ;carry = 0
+    ; notes:
+    ; r9 = len_a
+    ; r10 = len_b
+    ; r11 = x
+    ; r12 = y
+    ; r13 = sum (might need to push pop loop)
+    ; r14 = carry
+
+    ;
+        ; carry = 0
         mov rax, 0
         ; len of num a
         ; len of num b

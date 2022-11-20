@@ -64,7 +64,7 @@ slen:
     mov     rbx, rax
  
 nextchar:
-    cmp     byte [rax], 0
+    cmp     byte [rax], 0 ; array mode
     jz      finished
     inc     rax
     jmp     nextchar
@@ -164,8 +164,9 @@ sinput:
 
     mov     rdx, 255
     mov     rax, 0
+    push r11
     syscall
-    
+    pop r11
     pop rax
     pop rbx
     pop rsi
@@ -219,7 +220,9 @@ fastPrint: ; rax
     mov     rsi, rax ; print content
     mov     rdi, 1
     mov     rax, 1
+    push r11
     syscall
+    pop r11
 
     pop     rax
     pop     rbx
@@ -300,5 +303,9 @@ itoa:
 quit:
     mov     rbx, 0
     mov     rax, 60
+    push r11
     syscall
+    pop r11
     ret
+
+
