@@ -1,0 +1,145 @@
+; OddEven- Sum.
+
+; NASM x64 program
+; TRAN LONG VU
+
+
+%include 'functions.asm'
+
+section .data  
+    msg1 db "Input operator? "                        
+    msg2 db "Input two values:"   
+    msg3 db 'result'
+    msg4 db 'invalid input'
+section .bss
+    n resb 64 
+    num1 resb 64
+    num2 resb 64
+    operand resb 1
+    buffer resb 64
+
+section .text
+
+
+    global _start
+_start:
+    ;input  operant
+    mov rax, msg1
+    call sprintLF
+
+    mov rax, operand ; input 
+    call sinput 
+
+    mov rax, operand ;
+    call atoi   ; operand n in rax
+
+    call _Calculator
+    ; print result
+    call quit
+
+
+
+
+
+
+_Calculator: ; main algorithm function:
+    ;
+    .init:
+        mov r11, rax
+    ; notes; compare odd even
+    ; r8 num 1
+    ; r9 num 2
+    ; r10 result
+    ; r11 opeartor
+
+    ; r12 
+    ; r13
+    ; r14
+    ; r15
+    
+    .operand:
+        cmp r11, 1
+        je .plus
+        cmp r11, 2
+        je .minus
+        cmp r11, 3
+        je .multi
+        cmp r11, 4
+        je .divide
+        jmp .done
+    
+    .plus:
+        jmp .taketwoinput
+        add r8, r9 ; addition
+        mov rax, r8 
+        call itoa
+        mov rax, buffer
+        call sprintLF   
+        jmp .done
+    .minus:
+        jmp .taketwoinput
+        sub r8, r9 ; sub
+        mov rax, r8 
+        call itoa
+        mov rax, buffer
+        call sprintLF   
+        jmp .done
+    .multi:
+        jmp .taketwoinput
+        mov rax, r8
+        mul r9 ; multi
+        call itoa
+        mov rax, buffer
+        call sprintLF   
+        jmp .done
+    .divide:
+        jmp .taketwoinput
+        mov rax, r8
+        div r9 ; divide
+        call itoa
+        mov rax, buffer
+        call sprintLF   
+        jmp .done
+    .taketwoinput:
+        mov rax, msg2
+        call sprintLF
+
+        mov rax, num1
+        call sinput
+        call atoi ; to int
+        mov r8, rax 
+
+        mov rax, num2 
+        call sinput
+        call atoi
+        mov r9, rax
+
+        mov rax, msg3
+        call sprintLF    
+        
+    ;.invalid:
+    ;    mov rax, msg4
+    ;    call sprintLF
+    ;   jmp .done
+    .done:
+        ret
+
+
+
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
