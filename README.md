@@ -1,2 +1,2 @@
-# viettel-asm
+# asm
 Internship repo
